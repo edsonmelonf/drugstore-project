@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Drugstore</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+
+        .left {
+            width: 50%;
+            background-color: #ff0000;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .left h1 {
+            font-size: 44px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            line-height: 55px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .social-icons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icons i {
+            font-size: 20px;
+            border: 2px solid white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    
+        .right {
+            width: 50%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            width: 70%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: #cc0000;
+        }
+
+        .register-link {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #0066ff;
+            text-decoration: none;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="left">
+        <div class="logo">DRUGSTORE</div>
+        <h1>BEM-VINDO À<br>DRUGSTORE</h1>
+
+        <div class="social-icons">
+            <i>f</i>
+            <i>in</i>
+            <i>ig</i>
+            <i>yt</i>
+        </div>
+    </div>
+
+    <div class="right">
+        <div class="login-box">
+            <h2>LOGIN</h2>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="input-group">
+                    <label for="email">USUÁRIO</label>
+                    <input type="text" name="username" placeholder="Seu usuário" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="senha">SENHA</label>
+                    <input type="password" name="password" required>
+                </div>
+
+                <div class="remember">
+                    <input type="checkbox" id="lembrar">
+                    <label for="lembrar">Lembre-me</label>
+                </div>
+
+                <button class="btn-login" type="submit">Entrar</button>
+            </form>
+
+            <div class="register-link">
+                Ainda não tem conta?
+                <a href="{% url 'users:register' %}">Registre-se</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
