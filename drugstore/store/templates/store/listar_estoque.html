@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque</title>
+</head>
+<body>
+
+    <h1>Produtos no Estoque</h1>
+
+    {% if produtos %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+            </tr>
+
+            {% for p in produtos %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>R$ {{ p.price }}</td>
+                <td>{{ p.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Nenhum produto no estoque.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Voltar</a>
+
+</body>
+</html>

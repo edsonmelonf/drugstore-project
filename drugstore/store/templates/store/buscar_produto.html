@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Produto</title>
+</head>
+<body>
+
+<h1>Buscar Produto (Hash Table)</h1>
+
+<form method="GET">
+    Nome do produto:
+    <input type="text" name="q" required>
+    <button type="submit">Buscar</button>
+</form>
+
+{% if resultado %}
+    <h3>Produto encontrado:</h3>
+    <p><strong>Nome:</strong> {{ resultado.name }}</p>
+    <p><strong>Preço:</strong> R$ {{ resultado.price }}</p>
+    <p><strong>Quantidade:</strong> {{ resultado.quantity }}</p>
+{% elif resultado is not none %}
+    <p>Produto não encontrado.</p>
+{% endif %}
+
+<a href="/">Voltar</a>
+
+</body>
+</html>

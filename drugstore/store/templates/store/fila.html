@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Fila de Atendimento</title>
+</head>
+<body>
+
+<h1>Fila de Atendimento (Queue)</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    Nome do cliente:
+    <input type="text" name="cliente" required>
+    <button type="submit">Adicionar à fila</button>
+</form>
+
+<h3>Fila atual:</h3>
+
+{% if fila %}
+    <ul>
+        {% for cliente in fila %}
+        <li>{{ cliente }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Ninguém na fila.</p>
+{% endif %}
+
+<a href="/">Voltar</a>
+
+</body>
+</html>

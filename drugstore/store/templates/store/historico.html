@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico</title>
+</head>
+<body>
+
+<h1>Histórico de Operações (Stack)</h1>
+
+{% if historico %}
+    <ul>
+        {% for item in historico %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhuma operação registrada.</p>
+{% endif %}
+
+<a href="/">Voltar</a>
+
+</body>
+</html>
