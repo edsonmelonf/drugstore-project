@@ -8,7 +8,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/')  # home
+            return redirect('store:home')  # home
     else:
         form = RegisterForm()
 
@@ -28,7 +28,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
 
-            return redirect('/') #home.html
+            return redirect('store:home') #home.html
         
         else:
             return render(request, 'users/login.html', {'error' : 'Credenciais inválidas'})
