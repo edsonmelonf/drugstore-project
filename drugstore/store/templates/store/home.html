@@ -6,6 +6,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>DRUGSTORE - PRODUTOS</h1>
+    <div class="products">
+    {% for p in products %}
+        <div class="product-card">
+            <img src="{{ p.image_product.url }}" alt="{{ p.name_product }}">
+            <h3>{{ p.name_product }}</h3>
+            <p>R$ {{ p.price }}</p>
+            <p>{{ p.description }}</p>
+        </div>
+    {% endfor %}
+</div>
 </body>
 </html>
