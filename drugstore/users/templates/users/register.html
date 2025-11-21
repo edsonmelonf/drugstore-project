@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Drugstore</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+
+
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'montserrat', sans-serif;
             display: flex;
             height: 100vh;
         }
@@ -25,13 +29,13 @@
         }
         .left h1 {
             font-size: 44px;
-            font-weight: bold;
+            font-weight: 700;
             letter-spacing: 2px;
             line-height: 55px;
         }
         .logo {
             font-size: 26px;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 40px;
         }
         .right {
@@ -41,10 +45,11 @@
             justify-content: center;
             align-items: center;
         }
-        .login-box {
+       .login-box {
             width: 70%;
             max-width: 400px;
         }
+
         .login-box h2 {
             text-align: center;
             margin-bottom: 30px;
@@ -58,7 +63,37 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             margin-top: 10px;
+        }
+
+        .register-link {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #0066ff;
+            text-decoration: none;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -76,7 +111,33 @@
 
             <form method="POST">
                 {% csrf_token %}
-                {{ form.as_p }}
+            
+
+                <div class="input-group">
+                    <label for="email">E-MAIL</label>
+                    <input type="text" name="username" placeholder="Seu e-mail" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="senha">SENHA</label>
+                    <input type="password" name="password" required>
+                
+                   <ul>
+                       <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
+                       <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                       <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+                       <li>Sua senha não pode ser inteiramente numérica.</li>
+                   </ul>
+
+                </div>
+                
+
+                <div class="input-group">
+                    <label for="confirmar_senha">CONFIRMAR SENHA</label>
+                    <input type="password" name="confirm_password" required>
+
+                <ul> <li>Informe a mesma senha informada anteriormente, para verificação.</li> </ul>
+                </div>
 
                 <button class="btn-login" type="submit">Registrar</button>
             </form>
