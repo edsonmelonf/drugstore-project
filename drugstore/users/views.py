@@ -1,6 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import RegisterForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+
+def is_admin(user):
+    return user.is_staff or user.is_superuser
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -27,11 +33,21 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-
-            return redirect('store:home') #home.html
+        
+            if user.is_staff or user.is_superuser:
+                return redirect('users:adm') 
+            else:
+                return redirect('store:home')
         
         else:
             return render(request, 'users/login.html', {'error' : 'Credenciais inválidas'})
         
 
     return render(request,'users/login.html')
+
+
+
+@login_required
+@user_passes_test(is_admin)
+def adm_dashboard(request): 
+    return render(request,'users/adm.html')
