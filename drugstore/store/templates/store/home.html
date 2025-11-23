@@ -1,11 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
+"""
+{% load static %}
+
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Home - Drugstore</title>
+
+  <style>
+    :root{
+      --red:#e81010;
+      --muted:#7a7a7a;
+      --bg:#fafafa;
+      --card:#fff;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111}
+    .site{max-width:1200px;margin:28px auto;padding:0 18px}
+
+    .header{display:flex;align-items:center;gap:12px;padding:18px 0}
+    .brand{font-weight:800;color:var(--red);font-size:20px}
+    .search{flex:1}
+    .search input{width:100%;padding:10px;border-radius:999px;border:1px solid #e7e7e7}
+    .actions{display:flex;gap:10px;align-items:center}
+
+    .btn{padding:10px 12px;border-radius:8px;border:0;background:var(--red);color:#fff;cursor:pointer;font-weight:700}
+    .btn.outline{background:#fff;color:var(--red);border:1px solid var(--red)}
+
+    .hero{background:linear-gradient(90deg,var(--red),#ff6b6b);color:#fff;padding:20px;border-radius:10px;margin:10px 0 22px}
+
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.04);display:flex;flex-direction:column}
+    .card img{width:100%;height:140px;object-fit:contain;border-radius:8px;background:#fafafa}
+    .price{font-weight:800;margin-top:8px}
+    .card .meta{flex:1}
+
+    footer{margin-top:36px;padding:18px;border-top:1px solid #eee;color:var(--muted);font-size:14px}
+
+    @media (max-width:1000px){ .grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:640px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .header{gap:8px}
+    }
+  </style>
 </head>
 <body>
-    <h1>DRUGSTORE - PRODUTOS</h1>
+  <div class="site">
+
+    <header class="header">
+      <div class="brand">DRUGSTORE</div>
+
+      <form class="search" method="GET" action="{% url 'search_products' %}">
+        <input name="q" placeholder="Pesquisar produtos...">
+      </form>
+
+      <nav class="actions">
+        {% if user.is_authenticated %}
+        <a class="btn outline" href="{% url 'logout' %}">Sair</a>
+        {% else %}
+        <a class="btn outline" href="{% url 'login' %}">Entrar</a>
+        {% endif %}
+
+        <a class="btn outline" href="{% url 'cart:cart_details' %}">
+          Carrinho ({{ cart_count }})
+        </a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h2 style="margin:0">Bem-estar com economia e confiança</h2>
+      <p style="margin:6px 0 0">Frete rápido — Pagamento seguro — Atendimento especializado</p>
+    </section>
+
+    <main>
+      <h3 style="margin:6px 0 12px 0">Produtos em destaque</h3>
+
+      <div id="productsGrid" class="grid">
+
+        {% for p in products %}
+        <div class="card">
+
+          <img src="{{ p.image_product.url }}" alt="{{ p.name_product }}">
+
+          <div class="meta">
+            <div style="font-weight:700">{{ p.name_product }}</div>
+            <div style="color:var(--muted);font-size:13px">
+              {{ p.description|truncatewords:12 }}
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px">
+            <div class="price">R$ {{ p.price }}</div>
+
+            <a href="{% url 'add_to_cart' p.id %}" class="btn">Comprar</a>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </main>
+
+    <footer>
+      © 2025 Drugstore — contato@drugstore.com
+    </footer>
+
+  </div>
 </body>
 </html>
+"""
