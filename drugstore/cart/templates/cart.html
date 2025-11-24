@@ -1,11 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carrinho - Drugstore</title>
+  <style>
+    :root {
+      --red: #e81010;
+      --muted: #7a7a7a;
+      --bg: #fafafa;
+      --card: #fff;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #111;
+    }
+
+    .site {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 0 18px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      color: var(--red);
+      font-size: 20px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 0;
+      background: var(--red);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn.outline {
+      background: #fff;
+      color: var(--red);
+      border: 1px solid var(--red);
+    }
+
+    .cart-wrap {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+      margin-top: 18px;
+    }
+
+    .cart-list {
+      background: var(--card);
+      padding: 12px;
+      border-radius: 10px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .cart-item img {
+      width: 84px;
+      height: 84px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    .meta {
+      flex: 1;
+    }
+
+    .qty-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .summary {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    .summary .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .cart-wrap {
+        grid-template-columns: 1fr;
+      }
+      .summary {
+        position: static;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>CARRINHO</h1>
+  <div class="site">
+    <header class="header">
+      <a class="brand" href="{% url 'store:home' %}">DRUGSTORE</a>
+      <div style="flex:1"></div>
+      <a class="btn outline" href="{% url 'store:home' %}">Continuar comprando</a>
+    </header>
+
+    <main class="cart-wrap">
+      <section>
+        <h2>Seu Carrinho</h2>
+        <div class="cart-list">
+          {% if products %}
+            {% for product in products %}
+            <div class="cart-item">
+              <img src="{{ product.image_product.url|default:'/mnt/data/0984a25d-df65-48cb-9268-6cc6c1c7690c.png' }}" alt="{{ product.name_product }}">
+              <div class="meta">
+                <div style="font-weight:700">{{ product.name_product }}</div>
+                <div style="color:var(--muted);font-size:13px">R$ {{ product.price|floatformat:2 }}</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+                <form action="{% url 'cart:update_cart' product.id %}" method="POST" class="qty-controls">
+                  {% csrf_token %}
+                  <button type="submit" name="quantity" value="{{ product.quantity|add:'-1' }}" class="btn outline">-</button>
+                  <div style="min-width:30px;text-align:center">{{ product.quantity }}</div>
+                  <button type="submit" name="quantity" value="{{ product.quantity|add:'1' }}" class="btn outline">+</button>
+                </form>
+                <div style="color:var(--muted);font-size:13px">Subtotal: R$ {{ product.subtotal|floatformat:2 }}</div>
+                <form action="{% url 'cart:remove_from_cart' product.id %}" method="post" style="margin-top:6px">
+                  {% csrf_token %}
+                  <button type="submit" style="background:transparent;border:0;color:var(--red);cursor:pointer">Remover</button>
+                </form>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p style="color:var(--muted)">Seu carrinho está vazio.</p>
+          {% endif %}
+        </div>
+      </section>
+
+      <aside class="summary">
+        <h3>Resumo do pedido</h3>
+        <div class="row"><div>Subtotal</div><div id="cartSubtotal">R$ {{ total_price|floatformat:2 }}</div></div>
+        <div class="row"><div>Frete</div><div id="cartShipping">R$ {% if total_price > 0 %}9.90{% else %}0.00{% endif %}</div></div>
+        <div class="row" style="font-weight:800"><div>Total</div>
+          <div id="cartTotal">
+            R$ {% if total_price > 0 %}{{ total_price|add:"9.9"|floatformat:2 }}{% else %}0.00{% endif %}
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <a class="btn" href="{% url 'order:checkout' %}">Finalizar Compra</a>
+        </div>
+      </aside>
+    </main>
+  </div>
 </body>
 </html>
