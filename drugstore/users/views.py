@@ -35,7 +35,7 @@ def login_view(request):
             login(request, user)
         
             if user.is_staff or user.is_superuser:
-                return redirect('users:adm') 
+                return redirect('admin:index') 
             else:
                 return redirect('store:home')
         
@@ -50,4 +50,4 @@ def login_view(request):
 @login_required
 @user_passes_test(is_admin)
 def adm_dashboard(request): 
-    return render(request,'users/adm.html')
+    return redirect('admin:index')

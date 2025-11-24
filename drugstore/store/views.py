@@ -33,7 +33,7 @@ def search_products(request):
 
 @login_required
 def go_to_cart(request):
-    return redirect('cart:cart_details')
+    return redirect('cart:cart_view')
 
 
 

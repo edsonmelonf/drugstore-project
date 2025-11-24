@@ -111,16 +111,21 @@
 
             <form method="POST">
                 {% csrf_token %}
-            
+                
+                {% if form.errors %}
+                     <div style="color:red; margin-bottom:15px;">
+                              {{ form.errors }}
+                             </div>
+                {% endif %}
 
                 <div class="input-group">
                     <label for="email">E-MAIL</label>
-                    <input type="text" name="username" placeholder="Seu e-mail" required>
+                    <input type="text" name="email" placeholder="Seu e-mail" required>
                 </div>
 
                 <div class="input-group">
                     <label for="senha">SENHA</label>
-                    <input type="password" name="password" required>
+                    <input type="password" name="password1" required>
                 
                    <ul>
                        <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
@@ -134,7 +139,7 @@
 
                 <div class="input-group">
                     <label for="confirmar_senha">CONFIRMAR SENHA</label>
-                    <input type="password" name="confirm_password" required>
+                    <input type="password" name="passwords" required>
 
                 <ul> <li>Informe a mesma senha informada anteriormente, para verificação.</li> </ul>
                 </div>
