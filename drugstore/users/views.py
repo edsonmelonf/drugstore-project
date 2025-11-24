@@ -23,27 +23,25 @@ def register_view(request):
 
 
 def login_view(request):
-    if request.method =='POST':
+    context = {}
+
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-
         user = authenticate(request, username=username, password=password)
-
 
         if user is not None:
             login(request, user)
-        
-            if user.is_staff or user.is_superuser:
-                return redirect('admin:index') 
-            else:
-                return redirect('store:home')
-        
-        else:
-            return render(request, 'users/login.html', {'error' : 'Credenciais inválidas'})
-        
 
-    return render(request,'users/login.html')
+            if user.is_staff or user.is_superuser:
+                return redirect('admin:index')
+            return redirect('store:home')
+
+        context['error'] = 'Credenciais inválidas'
+
+    return render(request, 'users/login.html', context)
+
 
 
 

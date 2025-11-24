@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>Registro - Drugstore</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         body {
@@ -45,11 +48,10 @@
             justify-content: center;
             align-items: center;
         }
-       .login-box {
+        .login-box {
             width: 70%;
             max-width: 400px;
         }
-
         .login-box h2 {
             text-align: center;
             margin-bottom: 30px;
@@ -66,34 +68,37 @@
             font-weight: 600;
             margin-top: 10px;
         }
-
         .register-link {
             text-align: center;
             font-size: 14px;
             margin-top: 20px;
         }
-
         .register-link a {
             color: #0066ff;
             text-decoration: none;
         }
-        
         .input-group {
             margin-bottom: 20px;
+            position: relative; /* IMPORTANTE */
         }
-
         .input-group label {
             display: block;
             margin-bottom: 5px;
             font-size: 15px;
         }
-
         .input-group input {
             width: 100%;
             padding: 12px;
             border: 1px solid #999;
             border-radius: 5px;
             font-size: 15px;
+        }
+        .toggle-eye {
+            position: absolute;
+            right: 12px;
+            top: 42px;
+            cursor: pointer;
+            color: #555;
         }
     </style>
 </head>
@@ -113,9 +118,9 @@
                 {% csrf_token %}
                 
                 {% if form.errors %}
-                     <div style="color:red; margin-bottom:15px;">
-                              {{ form.errors }}
-                             </div>
+                    <div style="color:red; margin-bottom:15px;">
+                        {{ form.errors }}
+                    </div>
                 {% endif %}
 
                 <div class="input-group">
@@ -124,24 +129,26 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="senha">SENHA</label>
-                    <input type="password" name="password1" required>
-                
-                   <ul>
-                       <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
-                       <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
-                       <li>Sua senha não pode ser uma senha comumente utilizada.</li>
-                       <li>Sua senha não pode ser inteiramente numérica.</li>
-                   </ul>
+                    <label for="password1">SENHA</label>
+                    <input type="password" id="password1" name="password1" required>
+                    <i class="fa-solid fa-eye toggle-eye" id="togglePassword1"></i>
 
+                    <ul>
+                        <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
+                        <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                        <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+                        <li>Sua senha não pode ser inteiramente numérica.</li>
+                    </ul>
                 </div>
-                
 
                 <div class="input-group">
-                    <label for="confirmar_senha">CONFIRMAR SENHA</label>
-                    <input type="password" name="passwords" required>
+                    <label for="password2">CONFIRMAR SENHA</label>
+                    <input type="password" id="password2" name="password2" required>
+                    <i class="fa-solid fa-eye toggle-eye" id="togglePassword2"></i>
 
-                <ul> <li>Informe a mesma senha informada anteriormente, para verificação.</li> </ul>
+                    <ul>
+                        <li>Informe a mesma senha informada anteriormente, para verificação.</li>
+                    </ul>
                 </div>
 
                 <button class="btn-login" type="submit">Registrar</button>
@@ -152,6 +159,27 @@
             </div>
         </div>
     </div>
+
+<script>
+    
+    function setupToggle(passwordId, toggleId) {
+        const input = document.getElementById(passwordId);
+        const toggle = document.getElementById(toggleId);
+
+        toggle.addEventListener("click", () => {
+            const isPassword = input.type === "password";
+
+            input.type = isPassword ? "text" : "password";
+
+            // Troca a classe do ícone corretamente
+            toggle.classList.toggle("fa-eye");
+            toggle.classList.toggle("fa-eye-slash");
+        });
+    }
+
+    setupToggle("password1", "togglePassword1");
+    setupToggle("password2", "togglePassword2");
+</script>
 
 </body>
 </html>

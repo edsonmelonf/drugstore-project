@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>Login - Drugstore</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 
     <style>
         body {
@@ -56,7 +59,6 @@
             cursor: pointer;
         }
 
-    
         .right {
             width: 50%;
             background-color: #ffffff;
@@ -77,6 +79,7 @@
 
         .input-group {
             margin-bottom: 20px;
+            position: relative; /* necessário para o ícone */
         }
 
         .input-group label {
@@ -88,6 +91,7 @@
         .input-group input {
             width: 100%;
             padding: 12px;
+            padding-right: 40px; /* espaço para o ícone */
             border: 1px solid #999;
             border-radius: 5px;
             font-size: 15px;
@@ -133,6 +137,15 @@
             text-align: center;
             margin-bottom: 15px;
         }
+
+        /* Ícone olho */
+        #togglePassword {
+            position: absolute;
+            right: 12px;
+            top: 43px;
+            cursor: pointer;
+            color: #555;
+        }
     </style>
 </head>
 
@@ -142,14 +155,12 @@
         <div class="logo">DRUGSTORE</div>
         <h1>BEM-VINDO À<br>DRUGSTORE</h1>
 
-     <div class="social-icons">
-    
-    <i class="fa-brands fa-linkedin-in"></i>
-    <i class="fa-brands fa-instagram"></i>
-    <i class="fa-brands fa-youtube"></i>
-    <i class="fa-brands fa-whatsapp"></i>
-</div>
-
+        <div class="social-icons">
+            <i class="fa-brands fa-linkedin-in"></i>
+            <i class="fa-brands fa-instagram"></i>
+            <i class="fa-brands fa-youtube"></i>
+            <i class="fa-brands fa-whatsapp"></i>
+        </div>
     </div>
 
     <div class="right">
@@ -170,7 +181,9 @@
 
                 <div class="input-group">
                     <label for="senha">SENHA</label>
-                    <input type="password" name="password" required>
+                    <input type="password" id="password" name="password" required>
+
+                    <i class="fa-solid fa-eye" id="togglePassword"></i>
                 </div>
 
                 <div class="remember">
@@ -187,6 +200,28 @@
             </div>
         </div>
     </div>
+
+<script>
+    const passwordField = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", function () {
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+</script>
+
+<script>
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>
+
 
 </body>
 </html>
