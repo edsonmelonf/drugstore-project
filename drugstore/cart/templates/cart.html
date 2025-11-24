@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carrinho - Drugstore</title>
+  <style>
+    :root{--red:#e81010;--muted:#7a7a7a;--bg:#fafafa;--card:#fff;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111}
+    .site{max-width:1100px;margin:28px auto;padding:0 18px}
+    .header{display:flex;align-items:center;gap:12px;padding:18px 0}
+    .brand{font-weight:800;color:var(--red);font-size:20px}
+    .btn{padding:8px 12px;border-radius:8px;border:0;background:var(--red);color:#fff;cursor:pointer;font-weight:700}
+    .btn.outline{background:#fff;color:var(--red);border:1px solid var(--red)}
+    .cart-wrap{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:18px}
+    .cart-list{background:var(--card);padding:12px;border-radius:10px}
+    .cart-item{display:flex;gap:12px;align-items:center;padding:10px;border-bottom:1px solid #f0f0f0}
+    .cart-item img{width:84px;height:84px;object-fit:contain;border-radius:8px;background:#fafafa}
+    .meta{flex:1}
+    .qty-controls{display:flex;gap:8px;align-items:center}
+    .summary{background:var(--card);padding:16px;border-radius:10px}
+    .summary .row{display:flex;justify-content:space-between;margin-bottom:10px}
+    @media (max-width:900px){.cart-wrap{grid-template-columns:1fr}.summary{position:static}}
+  </style>
+</head>
+<body>
+  <div class="site">
+    <!-- Header (linka pro mesmo portfólio) -->
+    <header class="header">
+      <a class="brand" href="home.html">DRUGSTORE</a>
+      <div style="flex:1"></div>
+      <a class="btn outline" href="home.html">Continuar comprando</a>
+      <a class="btn outline" href="login.html" style="margin-left:8px">Entrar</a>
+    </header>
+
+    <!-- Conteúdo -->
+    <main class="cart-wrap">
+      <section>
+        <h2>Seu Carrinho</h2>
+        <div id="cartList" class="cart-list"></div>
+      </section>
+
+      <aside class="summary">
+        <h3>Resumo do pedido</h3>
+        <div class="row"><div>Subtotal</div><div id="cartSubtotal">R$ 0.00</div></div>
+        <div class="row"><div>Frete</div><div id="cartShipping">R$ 0.00</div></div>
+        <div class="row" style="font-weight:800"><div>Total</div><div id="cartTotal">R$ 0.00</div></div>
+
+        <div style="margin-top:12px">
+          <button class="btn" onclick="goToCheckout()">Finalizar Compra</button>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn outline" onclick="clearCart()">Limpar Carrinho</button>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // helpers (usam localStorage — compatível com o front que já existia)
+    function readCart(){
+      try{
+        const raw = localStorage.getItem('cart');
+        if(!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch(e){
+        console.error('readCart error', e);
+        localStorage.removeItem('cart');
+        return [];
+      }
+    }
+
+    function writeCart(c){
+      try{ localStorage.setItem('cart', JSON.stringify(c)); } catch(e){ console.error(e); }
+      updateCartUI();
+    }
+
+    function updateCartUI(){
+      const list = document.getElementById('cartList');
+      const cart = readCart();
+      list.innerHTML = '';
+      if(cart.length === 0){
+        list.innerHTML = '<p style="color:var(--muted)">Seu carrinho está vazio.</p>';
+        setTotals(0);
+        return;
+      }
+
+      let subtotal = 0;
+      cart.forEach(item => {
+        const itemTotal = Number(item.price) * Number(item.qty);
+        subtotal += itemTotal;
+
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <img src="${item.image || '/mnt/data/0984a25d-df65-48cb-9268-6cc6c1c7690c.png'}" alt="${item.name}">
+          <div class="meta">
+            <div style="font-weight:700">${item.name}</div>
+            <div style="color:var(--muted);font-size:13px">R$ ${Number(item.price).toFixed(2)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div class="qty-controls">
+              <button onclick="changeQty('${item.id}', -1)" class="btn outline">-</button>
+              <div style="min-width:30px;text-align:center">${item.qty}</div>
+              <button onclick="changeQty('${item.id}', 1)" class="btn outline">+</button>
+            </div>
+            <div><button style="background:transparent;border:0;color:var(--red);cursor:pointer" onclick="removeFromCart('${item.id}')">Remover</button></div>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+
+      const shipping = subtotal > 0 ? 9.90 : 0;
+      setTotals(subtotal, shipping);
+    }
+
+    function setTotals(subtotal, shipping = 0){
+      document.getElementById('cartSubtotal').textContent = 'R$ ' + Number(subtotal||0).toFixed(2);
+      document.getElementById('cartShipping').textContent = 'R$ ' + Number(shipping||0).toFixed(2);
+      document.getElementById('cartTotal').textContent = 'R$ ' + (Number(subtotal||0) + Number(shipping||0)).toFixed(2);
+    }
+
+    function addToCart(id, name, price, image){
+      try{
+        const key = String(id);
+        const cart = readCart();
+        const existing = cart.find(i => String(i.id) === key);
+        if(existing){ existing.qty = Number(existing.qty||0) + 1; }
+        else{ cart.push({ id: key, name: name||'Produto', price: Number(price)||0, image: image||'', qty: 1 }); }
+        writeCart(cart);
+        alert(name + ' adicionado ao carrinho');
+      } catch(e){ console.error('addToCart', e); }
+    }
+
+    function removeFromCart(id){ const cart = readCart().filter(i => String(i.id) !== String(id)); writeCart(cart); }
+    function changeQty(id, delta){ const cart = readCart(); const it = cart.find(i=>String(i.id)===String(id)); if(!it) return; it.qty = Math.max(1, Number(it.qty||0) + Number(delta)); writeCart(cart); }
+    function clearCart(){ localStorage.removeItem('cart'); updateCartUI(); }
+
+    function goToCheckout(){ window.location.href = 'checkout.html'; }
+
+    // init
+    document.addEventListener('DOMContentLoaded', updateCartUI);
+  </script>
+</body>
+</html>
