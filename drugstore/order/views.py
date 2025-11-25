@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CheckoutForm
-from store.models import Product
+from store.models import Produto
 from .models import Order, OrderItem
 
 def checkout_view(request):

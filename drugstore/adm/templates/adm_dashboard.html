@@ -4,31 +4,47 @@
     <meta charset="UTF-8">
     <title>Drugstore - Início</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        h1 { margin-bottom: 20px; }
+        body { 
+            font-family: Arial; 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: #fafafa;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 { 
+            margin-bottom: 20px; 
+            color: #e81010;
+        }
         a {
             display: block;
             width: 250px;
             background: #007bff;
-            margin-bottom: 12px;
+            margin: 12px auto;
             padding: 12px;
             text-align: center;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            font-weight: bold;
         }
-        a:hover { background: #0056b3; }
+        a:hover { 
+            background: #0056b3; 
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Sistema da Farmácia</h1>
 
-    <h1>Sistema da Farmácia</h1>
-
-    <a href="/add/">Adicionar ao Estoque</a>
-    <a href="/estoque/">Listar Estoque (LinkedList)</a>
-    <a href="/buscar/">Buscar Produto (Hash Table)</a>
-    <a href="/fila/">Fila de Atendimento (Queue)</a>
-    <a href="/historico/">Histórico de Operações (Stack)</a>
-
+        <a class="btn" href="{% url 'store:add_estoque' %}">Adicionar ao Estoque</a>
+        <a class="btn" href="{% url 'store:listar_estoque' %}">Listar Estoque</a>
+        <a class="btn" href="{% url 'store:fila_pedidos' %}">Fila de Atendimento</a>
+        <a class="btn" href="{% url 'store:historico' %}">Histórico</a>
+    </div>
 </body>
 </html>

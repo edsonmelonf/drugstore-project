@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404
-from store.models import Product
+from store.models import Produto
 
 # Create your views here.
 
@@ -52,3 +52,20 @@ def update_cart(request, product_id):
 
 def checkout_view(request):
     return redirect('order:checkout')
+
+
+
+def add_to_cart(request, product_id):
+    produto = get_object_or_404(Product, id=product_id)
+
+    # Pega o carrinho da sessão
+    cart = request.session.get('cart', {})
+
+    # Incrementa a quantidade ou adiciona o produto
+    cart[str(produto.id)] = cart.get(str(produto.id), 0) + 1
+
+    # Salva de volta na sessão
+    request.session['cart'] = cart
+
+    # Redireciona de volta para a home ou outra página
+    return redirect('store:home')
