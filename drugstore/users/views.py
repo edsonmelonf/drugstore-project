@@ -4,9 +4,6 @@ from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 
-def is_admin(user):
-    return user.is_staff or user.is_superuser
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -35,7 +32,7 @@ def login_view(request):
             login(request, user)
 
             if user.is_staff or user.is_superuser:
-                return redirect('admin:index')
+                return redirect('adm:dashboard')
             return redirect('store:home')
 
         context['error'] = 'Credenciais inválidas'
@@ -44,8 +41,3 @@ def login_view(request):
 
 
 
-
-@login_required
-@user_passes_test(is_admin)
-def adm_dashboard(request): 
-    return redirect('admin:index')
