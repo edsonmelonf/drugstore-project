@@ -23,9 +23,6 @@ stack_controller = StackController()
 
 # ========================= HOME =========================
 
-def home(request):
-    from django.db.models import Q
-from .models import Produto
 
 def home(request):
     query = request.GET.get("q", "").strip()

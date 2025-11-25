@@ -24,7 +24,5 @@ def create_product(request):
 
     return render(request, 'adm/create_product.html', {'form': form})
 
-def fila_pedidos(request):
-    orders = Order.objects.all().order_by("-created_at")
-    return render(request, "adm_fila.html", {"orders": orders})
+
 
