@@ -1,5 +1,5 @@
 from django.db import models
-from store.models import Product
+from store.models import Produto
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -20,7 +20,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 

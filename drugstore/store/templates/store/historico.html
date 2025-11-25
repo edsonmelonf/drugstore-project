@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Operações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fafafa;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        h1 {
+            color: #e81010;
+            margin-bottom: 20px;
+        }
+        ul {
+            text-align: left;
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #e81010;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #b00c0c; }
+        p {
+            font-style: italic;
+            color: #555;
+        }
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    
+<div class="container">
+    <h1>Histórico de Operações (Stack)</h1>
+
+    {% if historico %}
+        <ul>
+            {% for item in historico %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'store:desfazer' %}">
+            <button>Desfazer última ação</button>
+        </a>
+    {% else %}
+        <p>Histórico vazio.</p>
+    {% endif %}
+</div>
+
+
+</body>
+</html>

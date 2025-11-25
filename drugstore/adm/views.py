@@ -22,3 +22,6 @@ def create_product(request):
         form = ProductForm()
 
     return render(request, 'adm/create_product.html', {'form': form})
+
+
+
