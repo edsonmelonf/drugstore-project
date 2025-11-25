@@ -1,5 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
+from order.models import Order
+
 
 from .controllers.inventory_controller import InventoryController
 from .controllers.queue_controller import QueueController
@@ -21,20 +24,20 @@ stack_controller = StackController()
 # ========================= HOME =========================
 
 def home(request):
+    from django.db.models import Q
+from .models import Produto
+
+def home(request):
     query = request.GET.get("q", "").strip()
-    search_result = None
 
     if query:
-        result_dict = inventory_controller.search(query)
-        if result_dict:
-            class ProductObj:
-                def __init__(self, data):
-                    self.name = data["name"]
-                    self.price = data["price"]
-                    self.quantity = data["quantity"]
-            search_result = ProductObj(result_dict)
+        produtos = Produto.objects.filter(
+            Q(name_product__icontains=query) |
+            Q(description__icontains=query)
+        ).distinct()
+    else:
+        produtos = Produto.objects.all()
 
-    produtos = Produto.objects.all()
     cart = request.session.get('cart', {})
     cart_count = sum(cart.values())
 
@@ -42,66 +45,98 @@ def home(request):
         "products": produtos,
         "cart_count": cart_count,
         "search_query": query,
-        "search_result": search_result
     })
+
 
 # ========================= BUSCA =========================
 
 def search_products(request):
-    query = request.GET.get("q", "")
-    results = Produto.objects.filter(name_product__icontains=query)
-    return render(request, "store/search_results.html", {
-        "query": query,
-        "results": results
-    })
+    query = request.GET.get('q', '').strip()
+    products = Produto.objects.none()
 
+    if query:
+        products = Produto.objects.filter(
+            Q(name_product__icontains=query) |
+            Q(description__icontains=query)
+        ).distinct()
+
+    return render(request, 'store/home.html', {
+        'query': query,
+        'products': products,
+    })
 # ================= LINKEDLIST + HASH TABLE =================
 
 @user_passes_test(is_admin)
 def adicionar_estoque(request):
-    """Adiciona quantidade ao estoque usando o formulário AdicionarEstoqueForm"""
     if request.method == "POST":
-        form = AdicionarEstoqueForm(request.POST)
-        if form.is_valid():
-            produto = form.cleaned_data['produto']
-            quantidade = form.cleaned_data['quantidade']
-            produto.quantity += quantidade
-            produto.save()
-            return redirect('store:listar_estoque')
-    else:
-        form = AdicionarEstoqueForm()
-    return render(request, 'store/add_estoque.html', {'form': form})
+        name = request.POST.get("name").strip()
+        price = float(request.POST.get("price"))
+        qty = int(request.POST.get("qty"))
+        inventory_controller.add_product(name, price, qty)
+        return redirect("store:listar_estoque")
+    return render(request, "store/add_estoque.html")
 
 @user_passes_test(is_admin)
+@user_passes_test(is_admin)
 def listar_estoque(request):
+    query = ""
+    resultados = []
+
+    if request.method == "POST":
+        query = request.POST.get("nome", "").strip().lower()
+        if query:
+            produto = inventory_controller.search(query)
+            if produto:
+                resultados.append(produto)
+
     produtos = inventory_controller.get_all_products()
-    return render(request, "store/listar_estoque.html", {"produtos": produtos})
+    return render(request, "store/listar_estoque.html", {
+        "produtos": produtos,
+        "resultados": resultados,
+        "query": query
+    })
+
 
 @user_passes_test(is_admin)
 def buscar_produto(request):
+    query = request.POST.get("nome", "").strip().lower()
     resultados = []
-    if request.method == "POST":
-        nome = request.POST.get("nome", "").strip().lower()
-        todos_produtos = inventory_controller.get_all_products()
-        for p in todos_produtos:
-            if nome in p['name'].lower():
-                resultados.append(p)
-    return render(request, "store/buscar_produto.html", {"resultados": resultados})
+    if query:
+        produto = inventory_controller.search(query)
+        if produto:
+            resultados.append(produto)
+    return render(request, "store/buscar_produto.html", {"resultados": resultados, "query": query})
 
 # ========================= QUEUE (FILA) =========================
 
 @user_passes_test(is_admin)
 def fila_pedidos(request):
-    pedidos = queue_controller.list_orders()
+    pedidos = Order.objects.all().order_by("created_at")
     return render(request, "store/fila.html", {"pedidos": pedidos})
 
 @user_passes_test(is_admin)
+
+@user_passes_test(is_admin)
 def novo_pedido(request):
+
     if request.method == "POST":
-        cliente = request.POST.get("cliente")
-        queue_controller.new_order(cliente)
-        stack_controller.add_action(f"Novo pedido criado para {cliente}")
+        full_name = request.POST.get("full_name")
+        address = request.POST.get("address")
+        phone = request.POST.get("phone")
+        total = request.POST.get("total")
+
+        pedido = Order.objects.create(
+            user=request.user,
+            full_name=full_name,
+            address=address,
+            phone=phone,
+            total=total
+        )
+
+        queue_controller.new_order(pedido)
+        stack_controller.add_action(f"Novo pedido criado para {full_name}")
         return redirect("store:fila_pedidos")
+
     return render(request, "store/novo_pedido.html")
 
 @user_passes_test(is_admin)

@@ -2,7 +2,10 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Drugstore - Início</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Drugstore - adm</title>
     <style>
         body { 
             font-family: Arial; 
@@ -46,5 +49,16 @@
         <a class="btn" href="{% url 'store:fila_pedidos' %}">Fila de Atendimento</a>
         <a class="btn" href="{% url 'store:historico' %}">Histórico</a>
     </div>
+
+
+<script>
+    
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>
+
 </body>
 </html>

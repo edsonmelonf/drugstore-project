@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ProductForm
 
+
 def is_admin(user):
     return user.is_staff or user.is_superuser
 
@@ -23,5 +24,7 @@ def create_product(request):
 
     return render(request, 'adm/create_product.html', {'form': form})
 
-
+def fila_pedidos(request):
+    orders = Order.objects.all().order_by("-created_at")
+    return render(request, "adm_fila.html", {"orders": orders})
 

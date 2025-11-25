@@ -11,12 +11,12 @@ def cart_view(request):
     for product_id, quantity in cart.items():
         try:
             pid = int(product_id)
-            product = Product.objects.get(id=pid)
+            product = Produto.objects.get(id=pid)
             product.quantity = quantity
             product.subtotal = product.price * quantity
             total_price += product.subtotal
             products.append(product)
-        except (Product.DoesNotExist, ValueError, TypeError):
+        except (Produto.DoesNotExist, ValueError, TypeError):
             continue
 
     return render(request, 'cart.html', {
@@ -56,7 +56,7 @@ def checkout_view(request):
 
 
 def add_to_cart(request, product_id):
-    produto = get_object_or_404(Product, id=product_id)
+    produto = get_object_or_404(Produto, id=product_id)
 
     # Pega o carrinho da sessão
     cart = request.session.get('cart', {})

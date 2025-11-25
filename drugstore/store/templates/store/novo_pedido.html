@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -34,8 +33,10 @@
         label {
             font-weight: bold;
             margin-bottom: 6px;
+            align-self: flex-start;
         }
-        input[type="text"] {
+        input[type="text"],
+        input[type="number"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -58,18 +59,26 @@
 </head>
 <body>
 
-
 <div class="container">
     <h1>Novo Pedido</h1>
 
     <form method="POST">
         {% csrf_token %}
         <label>Nome do cliente:</label>
-        <input type="text" name="cliente" required>
+        <input type="text" name="full_name" required>
+
+        <label>Endereço:</label>
+        <input type="text" name="address" required>
+
+        <label>Telefone:</label>
+        <input type="text" name="phone" maxlength="11" required>
+
+        <label>Total:</label>
+        <input type="number" step="0.01" name="total" required>
+
         <button type="submit">Adicionar à Fila</button>
     </form>
 </div>
-
 
 </body>
 </html>

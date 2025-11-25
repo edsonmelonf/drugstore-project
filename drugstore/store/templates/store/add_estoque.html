@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Adicionar Produto ao Estoque</title>
+    <title>Adicionar Produto à Lista</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,26 +58,24 @@
 </head>
 <body>
 
-
 <div class="container">
-    <h1>Adicionar Produto ao Estoque</h1>
+    <h1>Adicionar Produto à Lista</h1>
 
-   <form method="POST">
-    {% csrf_token %}
+    <form method="POST">
+        {% csrf_token %}
 
-    <label>Nome:</label><br>
-    <input type="text" name="name" required><br><br>
+        <label>Nome do Produto:</label>
+        <input type="text" name="name" required>
 
-    <label>Preço:</label><br>
-    <input type="number" name="price" step="0.01" required><br><br>
+        <label>Preço:</label>
+        <input type="number" name="price" step="0.01" min="0" required>
 
-    <label>Quantidade:</label><br>
-    <input type="number" name="qty" required><br><br>
+        <label>Quantidade:</label>
+        <input type="number" name="qty" min="1" required>
 
-    <button type="submit">Adicionar</button>
-</form>
+        <button type="submit">Adicionar</button>
+    </form>
 </div>
-
 
 </body>
 </html>

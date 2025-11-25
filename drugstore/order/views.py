@@ -11,7 +11,7 @@ def checkout_view(request):
     products = []
     total = 0
     for product_id, quantity in cart.items():
-        product = get_object_or_404(Product, id=product_id)
+        product = get_object_or_404(Produto, id=product_id)
         product.quantity = quantity
         product.total_price = product.price * quantity
         total += product.total_price
@@ -49,7 +49,7 @@ def place_order(request):
 
     total = 0
     for product_id, quantity in cart.items():
-        product = get_object_or_404(Product, id=product_id)
+        product = get_object_or_404(Produto, id=product_id)
         total += product.price * quantity
 
     order = Order.objects.create(
@@ -61,7 +61,7 @@ def place_order(request):
     )
 
     for product_id, quantity in cart.items():
-        product = get_object_or_404(Product, id=product_id)
+        product = get_object_or_404(Produto, id=product_id)
         OrderItem.objects.create(
             order=order,
             product=product,
