@@ -6,9 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-
     <title>Registro - Drugstore</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -16,7 +14,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'montserrat', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             height: 100vh;
         }
@@ -56,6 +54,29 @@
             text-align: center;
             margin-bottom: 30px;
         }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+        .toggle-eye {
+            position: absolute;
+            right: 12px;
+            top: 42px;
+            cursor: pointer;
+            color: #555;
+        }
         .btn-login {
             width: 100%;
             padding: 12px;
@@ -77,28 +98,17 @@
             color: #0066ff;
             text-decoration: none;
         }
-        .input-group {
-            margin-bottom: 20px;
-            position: relative; /* IMPORTANTE */
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 15px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #999;
-            border-radius: 5px;
-            font-size: 15px;
-        }
-        .toggle-eye {
-            position: absolute;
-            right: 12px;
-            top: 42px;
-            cursor: pointer;
-            color: #555;
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            .left, .right {
+                width: 100%;
+            }
+            .login-box {
+                width: 90%;
+                max-width: none;
+            }
         }
     </style>
 </head>
@@ -114,7 +124,7 @@
         <div class="login-box">
             <h2>REGISTRO</h2>
 
-            <form method="POST">
+            <form method="POST" id="registerForm">
                 {% csrf_token %}
                 
                 {% if form.errors %}
@@ -132,7 +142,6 @@
                     <label for="password1">SENHA</label>
                     <input type="password" id="password1" name="password1" required>
                     <i class="fa-solid fa-eye toggle-eye" id="togglePassword1"></i>
-
                     <ul>
                         <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
                         <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
@@ -145,7 +154,6 @@
                     <label for="password2">CONFIRMAR SENHA</label>
                     <input type="password" id="password2" name="password2" required>
                     <i class="fa-solid fa-eye toggle-eye" id="togglePassword2"></i>
-
                     <ul>
                         <li>Informe a mesma senha informada anteriormente, para verificação.</li>
                     </ul>
@@ -161,17 +169,12 @@
     </div>
 
 <script>
-    
     function setupToggle(passwordId, toggleId) {
         const input = document.getElementById(passwordId);
         const toggle = document.getElementById(toggleId);
-
         toggle.addEventListener("click", () => {
             const isPassword = input.type === "password";
-
             input.type = isPassword ? "text" : "password";
-
-            // Troca a classe do ícone corretamente
             toggle.classList.toggle("fa-eye");
             toggle.classList.toggle("fa-eye-slash");
         });
@@ -179,6 +182,12 @@
 
     setupToggle("password1", "togglePassword1");
     setupToggle("password2", "togglePassword2");
+
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        alert("✅ Seu registro foi finalizado com sucesso!");
+        this.submit();
+    });
 </script>
 
 </body>
