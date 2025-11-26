@@ -1,7 +1,7 @@
 <h1 align="center"><strong>DRUGSTORE – E-commerce de Farmácia</strong></h1>
 
 <p align="center">
-  <img src="docs/prints/drugstore.jpg" width="500px" alt="Banner da Drugstore">
+  <img src="docs/drugstore.png" width="500px" alt="Banner da Drugstore">
 </p>
 
 <p align="center">
@@ -67,7 +67,7 @@ SQLite (padrão Django)
 📥
  Página Login
 <p align="center">
-  <img src="docs/prints/Captura de tela 2025-11-26 153145.png" width="750px"> <img src="docs/prints/Captura de tela 2025-11-26 153228.png" width="750px">
+  <img src="docs/Captura de tela 2025-11-26 153145.png" width="750px"> <img src="docs/Captura de tela 2025-11-26 153228.png" width="750px">
 
 </p>
 
