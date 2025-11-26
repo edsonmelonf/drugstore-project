@@ -74,7 +74,7 @@ SQLite (padrão Django)
 🏠
  Página Home
 <p align="center">
-  <img src="docs/home.png" width="750px">
+  <img src="docs/Captura de tela 2025-11-26 174438.png" width="750px">
 </p>
 
 🛒
